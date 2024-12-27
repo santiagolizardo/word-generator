@@ -20,7 +20,7 @@ private:
     std::list<Model> models;
 
 public:
-    Generator(std::list<string> trainingData, int order, double smoothing);
+    Generator(const std::list<string>& trainingData, int order, double smoothing);
     string generate(Random *random);
-    char getLetter(const string &name, Random *random);
+    char predictNextCharacter(const string &name, Random *random);
 };

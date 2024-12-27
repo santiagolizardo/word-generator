@@ -1,6 +1,6 @@
 #include "Random.hpp"
 
-double Random::next()
+double Random::nextDouble()
 {
     std::uniform_real_distribution distribution(0.0, 1.0);
 

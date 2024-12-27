@@ -5,6 +5,8 @@
 using std::cout;
 using std::endl;
 
+#include <unordered_set>
+
 #include "LevenshteinDistance.hpp"
 #include "Random.hpp"
 
@@ -12,7 +14,7 @@ NameGenerator::NameGenerator(const std::list<string> &trainingData, int order, d
 {
 }
 
-optional<string> NameGenerator::generateName(int minLength, int maxLength, int maxDistance, optional<string> similarTo, Random *random)
+optional<string> NameGenerator::generateName(int minLength, int maxLength, int maxDistance, const optional<string> &similarTo, Random *random)
 {
     string name = generate(random);
     size_t pos;
@@ -36,20 +38,20 @@ optional<string> NameGenerator::generateName(int minLength, int maxLength, int m
     return name;
 }
 
-std::list<string> NameGenerator::generateNames(int count, int length, Random *random)
+std::unordered_set<string> NameGenerator::generateNames(int count, int length, Random *random)
 {
     return generateNames(count, length, length, 0, std::nullopt, random);
 }
 
-std::list<string> NameGenerator::generateNames(int count, int minLength, int maxLength, int maxDistance, optional<string> similarTo, Random *random)
+std::unordered_set<string> NameGenerator::generateNames(int count, int minLength, int maxLength, int maxDistance, const optional<string> &similarTo, Random *random)
 {
-    std::list<string> names;
+    std::unordered_set<string> names;
 
     while (names.size() < count)
     {
         if (optional<string> name = generateName(minLength, maxLength, maxDistance, similarTo, random); name.has_value())
         {
-            names.push_back(name.value());
+            names.insert(name.value());
         }
     }
 

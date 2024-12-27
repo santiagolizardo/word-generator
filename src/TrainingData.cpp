@@ -5,12 +5,12 @@
 
 #include <rapidjson/document.h>
 
-void TrainingData::loadFromDisk() {
-    std::ifstream file("training-data.json");
+void TrainingData::loadFromDisk(const std::string & path) {
+    std::ifstream file(path);
     if (!file.is_open()) {
         throw std::runtime_error("Failed to open the file.");
     }
-    std::string jsonContent((std::istreambuf_iterator(file)),
+    const std::string jsonContent((std::istreambuf_iterator(file)),
                                 std::istreambuf_iterator<char>());
     file.close();
 

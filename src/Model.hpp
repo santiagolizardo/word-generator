@@ -19,9 +19,9 @@ private:
     std::map<string, std::list<double>> chains;
 
 public:
-    Model(std::list<string> trainingData, int order, double smoothing, std::vector<char> alphabet);
+    Model(const std::list<string> &trainingData, int order, double smoothing, const std::vector<char> &alphabet);
 
-    char generate(string context, Random *random);
+    char generate(const string &context, Random *random);
 
     void retrain(const std::list<string> &trainingData);
 
@@ -29,5 +29,5 @@ public:
 
     void buildChains();
 
-    int selectIndex(std::list<double> chain, Random *random);
+    int selectIndex(const std::list<double> &chain, Random *random);
 };

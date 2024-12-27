@@ -12,14 +12,14 @@ using std::string;
 
 #include "Random.hpp"
 
-Model::Model(std::list<string> trainingData, int order, double smoothing, std::vector<char> alphabet) : order{order},
+Model::Model(const std::list<string> &trainingData, int order, double smoothing, const std::vector<char> &alphabet) : order{order},
                                                                                                         smoothing{smoothing},
                                                                                                         alphabet{alphabet}
 {
     retrain(trainingData);
 }
 
-char Model::generate(string context, Random *random)
+char Model::generate(const string &context, Random *random)
 {
     auto it = chains.find(context);
     if (it != chains.end())
@@ -55,8 +55,7 @@ void Model::train(const std::list<string> &trainingData)
             }
             else
             {
-                std::list<char> &v = it->second;
-                v.push_back(data[i + order]);
+                it->second.push_back(data[i + order]);
             }
         }
     }
@@ -69,24 +68,25 @@ void Model::buildChains()
         for (char prediction : alphabet)
         {
             std::list<double>& chain = chains[context];
-            int count = std::count(observations[context].begin(), observations[context].end(), prediction);
+            int count = std::ranges::count(observations[context], prediction);
             chain.push_back(smoothing + count);
         }
     }
 }
 
-int Model::selectIndex(std::list<double> chain, Random *random)
+int Model::selectIndex(const std::list<double> &chain, Random *random)
 {
     std::vector<double> totals;
 
-    double accumulator = 0;
+    double accumulator = 0.0;
+
     for (const auto weight : chain)
     {
         accumulator += weight;
         totals.push_back(accumulator);
     }
 
-    const double r = random->next() * accumulator;
+    const double r = random->nextDouble() * accumulator;
 
     for (int i = 0; i < totals.size(); i++)
     {

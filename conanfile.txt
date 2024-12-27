@@ -1,5 +1,5 @@
 [requires]
-taywee-args/6.4.6
+argparse/3.1
 rapidjson/cci.20230929
 
 [generators]

@@ -10,7 +10,7 @@ using std::string;
 #include "Model.hpp"
 #include "Random.hpp"
 
-Generator::Generator(std::list<string> trainingData, int order, double smoothing) : order{order}, smoothing{smoothing}
+Generator::Generator(const std::list<string>& trainingData, int order, double smoothing) : order{order}, smoothing{smoothing}
 {
 	std::unordered_set<char> letters;
 	for (auto &word : trainingData)
@@ -32,17 +32,17 @@ Generator::Generator(std::list<string> trainingData, int order, double smoothing
 
 string Generator::generate(Random *random)
 {
-	string name(order, '#');
-	char letter = getLetter(name, random);
-	while (letter != '#' && letter != '\0')
+	string word(order, '#');
+	char nextCharacter = predictNextCharacter(word, random);
+	while (nextCharacter != '#' && nextCharacter != '\0')
 	{
-		name += letter;
-		letter = getLetter(name, random);
+		word += nextCharacter;
+		nextCharacter = predictNextCharacter(word, random);
 	}
-	return name;
+	return word;
 }
 
-char Generator::getLetter(const string &name, Random *random)
+char Generator::predictNextCharacter(const string &name, Random *random)
 {
 	char letter = '\0';
 	string context = name.substr(name.size() - order);
